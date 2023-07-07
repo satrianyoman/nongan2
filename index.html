@@ -51,13 +51,16 @@
         }
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[-8.462335454996895,115.39799369768426],[-8.442226588064802,115.43896424555696]]);
+        })
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
         L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
         }
         map.createPane('pane_GoogleSatellite_0');
         map.getPane('pane_GoogleSatellite_0').style.zIndex = 400;
@@ -95,7 +98,8 @@
                         <td colspan="2">' + (feature.properties['KECAMATAN'] !== null ? autolinker.link(feature.properties['KECAMATAN'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['DESA'] !== null ? autolinker.link(feature.properties['DESA'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">DESA</th>\
+                        <td>' + (feature.properties['DESA'] !== null ? autolinker.link(feature.properties['DESA'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['KODEWILAYA'] !== null ? autolinker.link(feature.properties['KODEWILAYA'].toLocaleString()) : '') + '</td>\
@@ -105,13 +109,16 @@
                         <td>' + (feature.properties['NIB'] !== null ? autolinker.link(feature.properties['NIB'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['SU'] !== null ? autolinker.link(feature.properties['SU'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">SU</th>\
+                        <td>' + (feature.properties['SU'] !== null ? autolinker.link(feature.properties['SU'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['PBT'] !== null ? autolinker.link(feature.properties['PBT'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">PBT</th>\
+                        <td>' + (feature.properties['PBT'] !== null ? autolinker.link(feature.properties['PBT'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['NOMORHAK'] !== null ? autolinker.link(feature.properties['NOMORHAK'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">NOMORHAK</th>\
+                        <td>' + (feature.properties['NOMORHAK'] !== null ? autolinker.link(feature.properties['NOMORHAK'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['LUASTERTUL'] !== null ? autolinker.link(feature.properties['LUASTERTUL'].toLocaleString()) : '') + '</td>\
@@ -126,16 +133,27 @@
                         <td colspan="2">' + (feature.properties['TAHUN'] !== null ? autolinker.link(feature.properties['TAHUN'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['PEMILIK'] !== null ? autolinker.link(feature.properties['PEMILIK'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">PEMILIK</th>\
+                        <td>' + (feature.properties['PEMILIK'] !== null ? autolinker.link(feature.properties['PEMILIK'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['TIPEPEMILI'] !== null ? autolinker.link(feature.properties['TIPEPEMILI'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">TIPEPEMILI</th>\
+                        <td>' + (feature.properties['TIPEPEMILI'] !== null ? autolinker.link(feature.properties['TIPEPEMILI'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['ALATUKUR'] !== null ? autolinker.link(feature.properties['ALATUKUR'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['STATUS'] !== null ? autolinker.link(feature.properties['STATUS'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">STATUS</th>\
+                        <td>' + (feature.properties['STATUS'] !== null ? autolinker.link(feature.properties['STATUS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Join-K3 2017_Field1</th>\
+                        <td>' + (feature.properties['Join-K3 2017_Field1'] !== null ? autolinker.link(feature.properties['Join-K3 2017_Field1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Join-K3 2017_Field2</th>\
+                        <td>' + (feature.properties['Join-K3 2017_Field2'] !== null ? autolinker.link(feature.properties['Join-K3 2017_Field2'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
@@ -185,6 +203,8 @@
         });
         bounds_group.addLayer(layer_NONGAN_1);
         map.addLayer(layer_NONGAN_1);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'NONGAN<br /><table><tr><td style="text-align: center;"><img src="legend/NONGAN_1_K30.png" /></td><td>K3</td></tr><tr><td style="text-align: center;"><img src="legend/NONGAN_1_1.png" /></td><td></td></tr></table>': layer_NONGAN_1,"Google Satellite": layer_GoogleSatellite_0,}).addTo(map);
         setBounds();
         map.addControl(new L.Control.Search({
             layer: layer_NONGAN_1,
